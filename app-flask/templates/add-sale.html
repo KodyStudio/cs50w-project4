@@ -1,0 +1,139 @@
+{% extends 'base.html'%}
+
+{% block title %} Añadir venta {% endblock %}
+
+{% block content %} 
+
+    <div class="content-page" >
+        <div class="container-fluid add-form-list ">
+           <div class="row">
+               <div class="col-sm-6">
+                   <div class="card shadow h-100 py-2">
+                       <div class="card-header d-flex justify-content-between ">
+                           <div class="header-title">
+                               <h4 class="card-title">Añadir Venta</h4>
+                           </div>
+                       </div>
+                       <div class="card-body">
+                           <form action="" method="" id="formu">
+                               <div class="row">
+
+                                   <div class="col-md-6">                      
+                                       <div class="form-group">
+                                           <label>Fecha</label>
+                                           <input type="date" id="fecha" name="fecha" class="form-control" placeholder="Ingrese la fecha" data-errors="Porfavor ingresa la fecha." required>
+                                           <div class="help-block with-errors"></div>
+                                       </div>
+                                   </div>    
+
+                                   <div class="col-md-6">
+                                       <div class="form-group">
+                                           <label>Cliente</label>
+                                           <input type="text" name="cliente" class="form-control" placeholder="ingrese el nombre del cliente" data-errors="Porfavor ingrese el nombre del cliente." required autocomplete="off">
+                                           <div class="help-block with-errors"></div>
+                                       </div>
+                                   </div> 
+
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Platillos *</label>
+                                            <select id="platillo" name="platillo" class="selectpicker form-control" data-style="py-0">
+
+                                                {% for platillos in platillos %}
+
+                                                <option id="op" value="{{platillos["id"]}}">{{platillos["nombre"]}}</option>
+        
+                                                {% endfor %}
+
+                                            </select>
+                                        </div> 
+                                    </div>     
+                                    
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Cantidad</label>
+                                            <input type="number" name="cantidad" id="cantidad" class="form-control" placeholder="ingrese la cantidad" data-errors="Porfavor ingrese la cantidad" required autocomplete="off">
+                                            <div class="help-block with-errors"></div>
+                                        </div>
+                                    </div> 
+
+                                <h1>{{precio}}</h1>
+
+                                </div>                      
+                               <button type="submit" class="btn btn-primary mr-2">Añadir Venta</button>
+                               <button type="reset" class="btn btn-danger">Reiniciar</button>
+                               
+                           </form>
+                       </div>
+                   </div>
+               </div>
+
+               <div class="col-6">
+                <p class="lead">Amount Due 2/22/2014</p>
+
+                <div class="table-responsive">
+                  <table class="table">
+                    <tr>
+                      <th style="width:50%">Subtotal:</th>
+                      <td>$250.30</td>
+                    </tr>
+                    <tr>
+                      <th>Tax (9.3%)</th>
+                      <td>$10.34</td>
+                    </tr>
+                    <tr>
+                      <th>Shipping:</th>
+                      <td>$5.80</td>
+                    </tr>
+                    <tr>
+                      <th>Total:</th>
+                      <td>$265.24</td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+
+
+
+           </div>
+           <div class="row">
+            <div class="col-lg-12 table-responsive">
+                <table class="table table-striped invoice-template">
+                    <thead>
+                        <tr>
+                          <th>Cantidad</th>
+                          <th>Productos</th>
+                          <th>fecha #</th>
+                          <th>Subtotal</th>
+                        </tr>
+                        </thead>
+                </table>
+              </div>
+           </div>
+
+
+
+
+           <script src="{{ url_for('static', filename='js/jquery.min.js')}}"></script>
+           <script src="{{ url_for('static', filename='js/invoice.js')}}"></script>
+           <script>
+
+            
+            //selecionamos el formulario
+            document.querySelector("#formu").onsubmit = () =>
+            {   
+                //capturamos el mensaje del usuario
+                cantidad = document.querySelector("#cantidad").value
+                platillo = document.querySelector("#op").value
+                fecha = document.querySelector("#fecha").value
+                console.log("fecha: ", fecha)
+
+                chat.rowinvoice(platillo,cantidad,fecha)
+
+                return false;
+            }
+
+            
+
+           </script>
+{% endblock %}

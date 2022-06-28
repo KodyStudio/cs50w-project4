@@ -1,0 +1,97 @@
+{% extends 'base.html'%}
+
+{% block title %} Reportes {% endblock %}
+
+{% block content %} 
+
+<div class="content-page" >
+    <div class="container-fluid add-form-list ">
+       <div class="row">
+           <div class="col-sm-12">
+               <div class="card shadow h-100 py-2">
+                   <div class="card-header d-flex justify-content-between ">
+                       <div class="header-title">
+                           <h4 class="card-title">Añadir Nuevo Reporte</h4>
+                       </div>
+                   </div>
+                   <div class="card-body">
+
+                       <form action="/home/report" method="post" data-toggle="validator" autocomplete="off">
+                           <div class="row">
+
+                               <div class="col-md-6">                      
+                                   <div class="form-group">
+                                       <label>Nombre *</label>
+                                       <input type="text" name="nombre" class="form-control" placeholder="Ingrese el nombre del reporte" data-errors="Porfavor ingresa el nombre." required>
+                                       <div class="help-block with-errors"></div>
+                                   </div>
+                               </div>
+
+                               <div class="col-md-6">                      
+                                <div class="form-group">
+                                    <label for="exampleFormControlSelect1">Estado *</label>
+                                    <select class="form-control" id="exampleFormControlSelect1" name="estado">
+                                      <option>Leve</option>
+                                      <option>Medio</option>
+                                      <option>Urgente</option>
+                                    </select>
+                                  </div>
+                                </div>
+
+                               <!-- IMAGEEEEEEEEEEEN -->
+                                
+                               <input id="url" name="url" hidden>
+
+                               <div class="col-md-12">
+                                
+                                   <div class="form-group">
+                                       <label>Imagen</label>
+                                       <input name="imagen" type="file" class="form-control image-file" id="img-uploader" >
+
+                                       <!-- <progress id="img-upload-bar" value="0" max="100" style="width: 100%"></progress> -->
+                                   </div>
+                               </div>
+
+
+                               <div class="col-md-6">
+                                   <div class="form-group">
+                                       <label>Fecha del reporte *</label>
+                                       <input type="date" name="fecha" class="form-control" placeholder="Ingresa el precio" data-errors="Please Enter Price." required>
+                                       <div class="help-block with-errors"></div>
+                                   </div>
+                               </div>
+
+                               <div class="col-md-6">                                    
+                                   <div class="form-group">
+                                       <label>Ubicacion *</label>
+                                       <input type="text" name="ubicacion" class="form-control" placeholder="ubicacion del reporte" required>
+                                       <div class="help-block with-errors"></div>
+                                   </div>
+                               </div>
+
+
+
+                               <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Como se detecto</label>
+                                        <input name="identificar" maxlength="50" placeholder="Como se detecto el reporte" class="form-control" rows="4">
+                                    </div>
+                                </div>
+
+                               <div class="col-md-6">
+                                   <div class="form-group">
+                                       <label>Descripcion del reporte</label>
+                                       <input name="descripcion" maxlength="50" placeholder="Descripcion breve del reporte" class="form-control" rows="4">
+                                   </div>
+                               </div>
+
+                           </div>                            
+                           <button type="submit" class="btn btn-primary mr-2">Añadir Reporte</button>
+                           <button type="reset" class="btn btn-danger">Reiniciar</button>
+                       </form>
+                   </div>
+               </div>
+           </div>
+       </div>
+
+{% endblock %}

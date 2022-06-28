@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{ url_for('static', filename='css/login.css') }}" rel="stylesheet">
+    <link rel="icon" href="https://res.cloudinary.com/moonsystem/image/upload/v1639354223/moon_icon_sfi3s6.png">
+    <title>{% block title %}  {% endblock %}</title>
+
+    {% if get_flashed_messages() %}
+    <div class="container-fluid">
+            <div class="col-md-12">
+                <div class="alert alert-primary border" role="alert">
+                    {{ get_flashed_messages() | join(" ") }}
+                </div>
+            </div>
+    </div>
+    {% endif %}
+
+</head>
+<body>
+
+    {% block content2 %}
+
+
+    {% endblock %}
+    
+
+</body>
+</html>
