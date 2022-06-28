@@ -16,8 +16,8 @@
         </div>
     </div>
     <div>
-        <div class="small text-gray-500"></div>
-        <span class="font-weight-bold"></span>
+        <div class="small text-gray-500">{{reporte['fecha']}}</div>
+        <span class="font-weight-bold">{{reporte['nombre']}}</span>
     </div>
 </a>
 
@@ -44,7 +44,7 @@
         <!-- saludo al usuario -->
         <div class="col-lg-6">
             <div class="card-body p-0 mt-lg-2 mt-0">
-                <h3 class="mb-3">Hola Usuario, Buenos Dias!</h3>
+                <h3 class="mb-3">Hola {{user}}, Buenos Dias!</h3>
                 <p class="mb-0 mr-4">Tu Dashboard le ofrece vistas del rendimiento de tu negocio.</p>
             </div>
         </div>
@@ -179,10 +179,12 @@
         const myChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                
+                //consulta de la base de datos
+                labels: [{% for prod1n in prod1n %}'{{prod1n['nombre']}}',{% endfor %}],
                 datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
+                    //consulta de la base de datos
+                    data: [{% for prod1c in prod1c %}{{ prod1c['cantidad']}}, {% endfor %}],
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
                         'rgba(54, 162, 235, 0.2)',

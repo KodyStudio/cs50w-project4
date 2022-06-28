@@ -55,7 +55,7 @@
                                </td>
                                <td>
                                   <div class="d-flex align-items-center">
-                                     <img src="" class="img-fluid rounded avatar-50 mr-3" alt="image">
+                                     <img src="{{reportetodos["imagen"]}}" class="img-fluid rounded avatar-50 mr-3" alt="image">
                                      <div>
                                        {{reportetodos["nombre"]}}
                                         <p class="mb-0"><small>{{reportetodos["descripcion"]}}</small></p>
@@ -84,5 +84,28 @@
             </div>
         </div>
 </div>
+
+<table class="table table-hover">
+  <tbody>
+    <tr onclick="window.location='/';">
+    <th scope="row"></th>
+      <td>Mark</td>
+      <td>Otto</td>
+      <td>@mdo</td>
+    </tr>
+    <tr>
+      <th scope="row"></th>
+        <td>Jacob</td>
+        <td>Thornton</td>
+        <td>@fat</td>
+    </tr>
+    <tr>
+      <th scope="row"></th>
+        <td>Larry</td>
+        <td>the Bird</td>
+        <td>@twitter</td>
+    </tr>
+  </tbody>
+</table>
 
 {% endblock %}

@@ -17,7 +17,7 @@ db = scoped_session(sessionmaker(bind=engine))
 # db.execute("TRUNCATE TABLE categorias RESTART IDENTITY;")
 
 # --Creacion de tablas!
-# db.execute("create table reportes(id SERIAL PRIMARY KEY NOT NULL, nombre VARCHAR NOT NULL, imagen VARCHAR NOT NULL, estado varchar NOT NULL, descripcion VARCHAR(50), identificar VARCHAR(50), fecha DATE NOT NULL, ubicacion VARCHAR NOT NULL)")
+db.execute("create table reportes(id SERIAL PRIMARY KEY NOT NULL, nombre VARCHAR NOT NULL, imagen VARCHAR NOT NULL, estado varchar NOT NULL, descripcion VARCHAR(50), identificar VARCHAR(50), fecha DATE NOT NULL, ubicacion VARCHAR NOT NULL)")
 # db.execute("create table categorias(id serial primary key NOT NULL, nombre VARCHAR NOT NULL)")
 # db.execute("create table productos(id serial primary key NOT NULL, nombre VARCHAR NOT NULL, costo money NOT NULL, precio money NOT NULL, descripcion VARCHAR(10), imagen VARCHAR,id_categoria integer references categorias)")
 # db.execute("create table platillos(id serial primary key NOT NULL, nombre VARCHAR NOT NULL, imagen VARCHAR, descripcion VARCHAR (10))")
