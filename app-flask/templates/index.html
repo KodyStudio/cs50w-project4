@@ -3,26 +3,23 @@
 {% block title %} Dashboard {% endblock %}
 
 {% block noti %} 
-
-{% for reporte in reporte %}  
+{% for reportes in reporte %}  
                                 
-<a class="dropdown-item d-flex align-items-center" href="#">
+<a class="dropdown-item d-flex align-items-center" href="/home/list_report">
     <div class="mr-3">
-        <div class="icon-circle bg-{% if reporte[estado] == Leve %}success
-        {% elif reporte[estado] == Medio %}warning
-        {% else %}danger
-        {% endif %}">
+        <div class="icon-circle bg-{% if reportes['estado'] == 'Leve' %}success
+        {% elif reportes['estado'] == 'Urgente' %}danger
+        {% endif %}warning">
             <i class="fas fa-file-alt text-white"></i>
         </div>
     </div>
     <div>
-        <div class="small text-gray-500">{{reporte['fecha']}}</div>
-        <span class="font-weight-bold">{{reporte['nombre']}}</span>
+        <div class="small text-gray-500">{{reportes['fecha']}}</div>
+        <span class="font-weight-bold">{{reportes['nombre']}}</span>
     </div>
 </a>
 
 {% endfor %}
-
 {% endblock %}
 
 {% block content %} 
@@ -153,7 +150,7 @@
                                 <div class="card card-block card-stretch card-height mb-0">
                                     <div class="card-body">
                                         <div class="bg-warning-light rounded">
-                                            <img src="{{plat['imagen']}}" class="style-img img-fluid m-auto p-3" alt="image">
+                                            <img src="{{plat['imagen']}}" class="style-img img-fluid m-auto p-3 rounded" alt="image">
                                         </div>
                                         <div class="style-text text-left mt-3">
                                             <h5 class="mb-1">{{plat["nombre"]}}</h5>
@@ -185,6 +182,7 @@
                 datasets: [{
                     //consulta de la base de datos
                     data: [{% for prod1c in prod1c %}{{ prod1c['cantidad']}}, {% endfor %}],
+                    label: '',
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
                         'rgba(54, 162, 235, 0.2)',

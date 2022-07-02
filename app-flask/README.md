@@ -1,1 +1,1 @@
-# cs50w-project4-
+Sistema de Inventario de un restaurante, la aplicacion fue desarrollado con flask, bootstrap, postgresql, este sistema fue pensando en la gestion de inventario y venta de un restaurante, el sistema cuenta con diferentes funcionalidades como el del panel de control, en el panel de control vemos una vision de conjunto y graficos comparativos y otros datos para monitoriar el rendimiento del restaurante, control de productos, platillos, ventas, un chat y realizacion de reportes.

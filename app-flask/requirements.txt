@@ -3,4 +3,7 @@ Flask-Session
 psycopg2-binary
 SQLAlchemy
 python-dotenv
-flask_socketio
+Flask-SocketIO
+helpers
+Werkzeug
+temp

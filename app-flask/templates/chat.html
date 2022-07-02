@@ -2,6 +2,26 @@
 
 {% block title %} Chat {% endblock %}
 
+{% block noti %} 
+{% for reportes in reporte %}  
+                                
+<a class="dropdown-item d-flex align-items-center" href="/home/list_report">
+    <div class="mr-3">
+        <div class="icon-circle bg-{% if reportes['estado'] == 'Leve' %}success
+        {% elif reportes['estado'] == 'Urgente' %}danger
+        {% endif %}warning">
+            <i class="fas fa-file-alt text-white"></i>
+        </div>
+    </div>
+    <div>
+        <div class="small text-gray-500">{{reportes['fecha']}}</div>
+        <span class="font-weight-bold">{{reportes['nombre']}}</span>
+    </div>
+</a>
+
+{% endfor %}
+{% endblock %}
+
 {% block content %} 
 
 <div class="container">
@@ -11,7 +31,7 @@
           <div class="card card-primary card-outline direct-chat direct-chat-primary shadow-sm">
           <div class="card-header">
             <h3 class="card-title">
-                chat de ejemplo
+                Chat en vivo
             </h3>
 
           </div>
@@ -21,7 +41,6 @@
             <div class="direct-chat-messages" style="    height: 550px;">
             </div>
             <!--/.direct-chat-messages-->
-  
             <!-- Contacts are loaded here -->
             <!-- /.direct-chat-pane -->
           </div>
@@ -53,6 +72,8 @@
 <script src="{{ url_for('static', filename='js/chat.js')}}"></script>
 
 <script>
+
+
       var socket = io()
   
   
@@ -64,11 +85,19 @@
           if(mensaje == '') 
             return false
           document.querySelector("#mensaje").value = ''
-          console.log(mensaje)
+          //fecha
+          var hoy = new Date();
+          time = new Date().toLocaleDateString('es-ES', { weekday:"long", year:"numeric", month:"short", day:"numeric"});
+          hora = hoy.getHours() + ':' + hoy.getMinutes();
+          var fecha = time + ' - ' + hora
           //emetimos un evento, con el mensaje del usuario
-          socket.emit("saludar", mensaje, "{{username}}", (message) => {
-            time = new Date().toLocaleDateString('es-ES', { weekday:"long", year:"numeric", month:"short", day:"numeric"})
-            chat.printMessageRight("{{username}}", time, message)
+          socket.emit("saludar", mensaje, "{{username}}", fecha, (message) => {
+                      //fecha
+          var hoy = new Date();
+          fecha = new Date().toLocaleDateString('es-ES', { weekday:"long", year:"numeric", month:"short", day:"numeric"});
+          hora = hoy.getHours() + ':' + hoy.getMinutes();
+          var time = fecha + ' - ' + hora
+            chat.printMessageRight("{{username}}",time,  message)
             document.querySelector(".direct-chat-messages").scrollBy(0,100)
           }) 
           return false;
@@ -76,10 +105,8 @@
   
       //recibimos el evento del servidor con la respuesta
       socket.on("general", (data) =>{
-
-        console.log("---------------", data)
-  
-        time = new Date().toLocaleDateString('es-ES', { weekday:"long", year:"numeric", month:"short", day:"numeric"})
+          
+        time = data.fecha
         usuario = data.username
         message = data.message
   

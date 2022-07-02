@@ -2,6 +2,26 @@
 
 {% block title %} Lista Reportes {% endblock %}
 
+{% block noti %} 
+{% for reportes in reporte %}  
+                                
+<a class="dropdown-item d-flex align-items-center" href="/home/list_report">
+    <div class="mr-3">
+        <div class="icon-circle bg-{% if reportes['estado'] == 'Leve' %}success
+        {% elif reportes['estado'] == 'Urgente' %}danger
+        {% endif %}warning">
+            <i class="fas fa-file-alt text-white"></i>
+        </div>
+    </div>
+    <div>
+        <div class="small text-gray-500">{{reportes['fecha']}}</div>
+        <span class="font-weight-bold">{{reportes['nombre']}}</span>
+    </div>
+</a>
+
+{% endfor %}
+{% endblock %}
+
 {% block content %} 
 
 <div class="container-fluid">
@@ -34,11 +54,8 @@
                                      <label for="checkbox1" class="mb-0"></label>
                                   </div>
                                </th>
-                               <th>Productos</th>
-                               <th>Categoria</th>
-                               <th>Precio</th>
-                               <th>Costo</th>
-                               <th>Cantidad</th>
+                               <th>Reportes</th>
+
                                <th>Acción</th>
                             </tr>
                          </thead>
@@ -62,15 +79,22 @@
                                      </div>
                                   </div>
                                </td>
-                               <td>{{reportetodos["id"]}}</td>
-                               <td>C$ productos["precio"]</td>
-                               <td>C$productos["costo"]</td>
-                               <td>productos["cantidad"]</td>
                                <td>
                                   <!-- accion -->
                                   <div class="d-flex align-items-center list-action">
-                                     <a class="badge bg-warning" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"
-                                        href=""><i class="ri-delete-bin-5-line mr-0"></i></a>
+                                     <a class="badge bg-warning mr-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"
+                                     href="/eliminar_reportes/{{reportetodos['id']}}"
+                                        ><i class="ri-delete-bin-5-line mr-0"></i></a>
+                                        <a class="badge bg-{% if reportetodos['solucion'] == False %}warning 
+                                        {% else %}primary
+                                        {% endif %}" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"
+                                        ><i class="" style="{% if reportetodos['solucion'] == True %}color: white;
+                                                                    {% else %}
+                                                                    {% endif %}">
+                                          {% if reportetodos['solucion'] == True %} SOLUCIONADO
+                                          {% else %} EN ESPERA
+                                        {% endif %}
+                                        </i></a>
                                   </div>
                                </td>
                             </tr>
@@ -84,28 +108,5 @@
             </div>
         </div>
 </div>
-
-<table class="table table-hover">
-  <tbody>
-    <tr onclick="window.location='/';">
-    <th scope="row"></th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
-    <tr>
-      <th scope="row"></th>
-        <td>Jacob</td>
-        <td>Thornton</td>
-        <td>@fat</td>
-    </tr>
-    <tr>
-      <th scope="row"></th>
-        <td>Larry</td>
-        <td>the Bird</td>
-        <td>@twitter</td>
-    </tr>
-  </tbody>
-</table>
 
 {% endblock %}

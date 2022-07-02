@@ -61,7 +61,8 @@ def home():
     user = db.execute(f"SELECT * FROM users WHERE id = :id",
                       {"id": session["user_id"]}).fetchone()["username"]
 
-    reporte = db.execute("SELECT * FROM reportes limit 5").fetchall()
+    reporte = db.execute(
+        "SELECT * FROM reportes ORDER BY id desc limit 3").fetchall()
 
     return render_template('index.html', reporte=reporte, user=user, ventas=ventas, total=total, ventat=ventat, plat=plat, prod1n=prod1n, prod1c=prod1c)
 
@@ -88,12 +89,15 @@ def add_product():
 
     else:
 
+        reporte = db.execute(
+            "SELECT * FROM reportes ORDER BY id desc limit 3").fetchall()
+
         user = db.execute("SELECT * FROM users WHERE id = :id",
                           {"id": session["user_id"]}).fetchone()["username"]
 
         categorias = db.execute(
             "SELECT * FROM categorias WHERE nombre ilike '%%'")
-        return render_template("add-product.html", user=user, categorias=categorias)
+        return render_template("add-product.html", user=user, categorias=categorias, reporte=reporte)
 
 
 @app.route('/home/list_product')
@@ -106,7 +110,10 @@ def list_product():
     user = db.execute("SELECT * FROM users WHERE id = :id",
                       {"id": session["user_id"]}).fetchone()["username"]
 
-    return render_template('list-product.html', lista=lista, user=user)
+    reporte = db.execute(
+        "SELECT * FROM reportes ORDER BY id desc limit 3").fetchall()
+
+    return render_template('list-product.html', lista=lista, user=user, reporte=reporte)
 
 
 @app.route('/home/list_platillo')
@@ -119,7 +126,10 @@ def list_platillo():
     user = db.execute("SELECT * FROM users WHERE id = :id",
                       {"id": session["user_id"]}).fetchone()["username"]
 
-    return render_template('list_platillo.html', lista=lista, user=user)
+    reporte = db.execute(
+        "SELECT * FROM reportes ORDER BY id desc limit 3").fetchall()
+
+    return render_template('list_platillo.html', lista=lista, user=user, reporte=reporte)
 
 
 @app.route('/eliminar_platillos/<id>')
@@ -175,8 +185,26 @@ def getjson():
             "nombre": nombre["nombre"],
             "imagen": nombre["imagen"],
             "precio": nombre["precio"],
+        }
+
+        otra.append(data)
+
+    return jsonify(otra)
 
 
+@app.route('/jsonsale', methods=["GET"])
+def jsonsale():
+
+    ap = db.execute("SELECT * FROM platillos").fetchall()
+
+    otra = []
+    for nombre in ap:
+
+        data = {
+            "id": nombre['id'],
+            "nombre": nombre["nombre"],
+            "imagen": nombre["imagen"],
+            "precio": nombre["precio"],
         }
 
         otra.append(data)
@@ -217,13 +245,16 @@ def add_sale():
         return redirect('/home/list_sale')
     else:
 
+        reporte = db.execute(
+            "SELECT * FROM reportes ORDER BY id desc limit 3").fetchall()
+
         user = db.execute("SELECT * FROM users WHERE id = :id",
                           {"id": session["user_id"]}).fetchone()["username"]
 
         platillos = db.execute(
             "SELECT * FROM platillos")
 
-        return render_template('add-sale.html', user=user, platillos=platillos)
+        return render_template('add-sale.html', user=user, platillos=platillos, reporte=reporte)
 
 
 @app.route('/home/list_sale')
@@ -236,7 +267,10 @@ def list_sale():
     user = db.execute("SELECT * FROM users WHERE id = :id",
                       {"id": session["user_id"]}).fetchone()["username"]
 
-    return render_template('list-sale.html', user=user, ventas=ventas)
+    reporte = db.execute(
+        "SELECT * FROM reportes ORDER BY id desc limit 3").fetchall()
+
+    return render_template('list-sale.html', user=user, ventas=ventas, reporte=reporte)
 
 
 @app.route('/home/add_platillo', methods=["GET", "POST"])
@@ -258,16 +292,19 @@ def add_platillo():
         return redirect("/home/list_platillo")
 
     else:
+        reporte = db.execute(
+            "SELECT * FROM reportes ORDER BY id desc limit 3").fetchall()
 
         user = db.execute("SELECT * FROM users WHERE id = :id",
                           {"id": session["user_id"]}).fetchone()["username"]
 
-        return render_template('add-platillo.html', user=user)
+        return render_template('add-platillo.html', user=user, reporte=reporte)
 
 
 @app.route('/home/error')
 @login_required
 def error():
+
     return render_template('404.html')
 
 
@@ -390,18 +427,25 @@ def change():
 @login_required
 def chat():
 
-    username = db.execute(f"SELECT * FROM users WHERE id = :id",
+    reporte = db.execute(
+        "SELECT * FROM reportes ORDER BY id desc limit 3").fetchall()
+
+    username = db.execute("SELECT * FROM users WHERE id = :id",
                           {"id": session["user_id"]}).fetchone()["username"]
 
-    return render_template("chat.html", username=username)
+    return render_template("chat.html", username=username, reporte=reporte)
 
 
 @socketio.on('saludar')
-def saludar(mensaje, user):
+def saludar(mensaje, user, fecha):
 
-    print("ass", user, mensaje)
+    print("fecha: ", fecha)
 
-    data = {"message": mensaje, "username": user}
+    db.execute(
+        "INSERT INTO chats (mensaje, id_usuario, fecha) VALUES (:mensaje, :id_usuario, :fecha)", {"mensaje": mensaje, "id_usuario": session["user_id"], "fecha": fecha})
+    db.commit()
+
+    data = {"message": mensaje, "username": user, "fecha": fecha}
     # Emitir a todos con el argumento broadcast
     emit('general', data,
          broadcast=True, include_self=False)
@@ -435,7 +479,14 @@ def report():
         flash("reporte agregado")
         return redirect("/")
     else:
-        return render_template("report.html")
+
+        reporte = db.execute(
+            "SELECT * FROM reportes ORDER BY id desc limit 3").fetchall()
+
+        user = db.execute("SELECT * FROM users WHERE id = :id",
+                          {"id": session["user_id"]}).fetchone()["username"]
+
+        return render_template("report.html", user=user, reporte=reporte)
 
 
 @app.route('/home/list_report', methods=["GET", "POST"])
@@ -444,20 +495,54 @@ def list_report():
 
     reportetodos = db.execute("SELECT * FROM reportes").fetchall()
 
-    return render_template("list-report.html", reportetodos=reportetodos)
+    reporte = db.execute(
+        "SELECT * FROM reportes ORDER BY id desc limit 3").fetchall()
+
+    user = db.execute("SELECT * FROM users WHERE id = :id",
+                      {"id": session["user_id"]}).fetchone()["username"]
+
+    return render_template("list-report.html", reportetodos=reportetodos, reporte=reporte, user=user)
 
 
 @app.route('/report/<id>', methods=["GET", "POST"])
 @login_required
 def report_id(id):
 
-    reportetodos = db.execute(
-        "SELECT * FROM reportes WHERE id=:id", {"id": id}).fetchone()
+    if request.method == "POST":
 
-    return render_template("report-detallado.html", reportetodos=reportetodos)
+        db.execute(
+            "UPDATE reportes set solucion='TRUE' WHERE id=:id", {'id': id})
+        db.commit()
+
+        flash('Reporte solucionado')
+        return redirect('/home/list_report')
+
+    else:
+        reportetodos = db.execute(
+            "SELECT * FROM reportes WHERE id=:id", {"id": id}).fetchone()
+
+        reporte = db.execute(
+            "SELECT * FROM reportes ORDER BY id desc limit 3").fetchall()
+
+        user = db.execute("SELECT * FROM users WHERE id = :id",
+                          {"id": session["user_id"]}).fetchone()["username"]
+
+        return render_template("report-detallado.html", reportetodos=reportetodos, reporte=reporte, user=user)
+
+
+@app.route('/eliminar_reportes/<id>')
+@login_required
+def eliminar_reportes(id):
+
+    db.execute("DELETE FROM reportes WHERE id=:id", {"id": id})
+    db.commit()
+
+    flash("Reporte eliminado")
+    return redirect('/home/list_report')
 
 
 @app.errorhandler(404)
+@login_required
 def page_not_found(error):
     return render_template('404.html'), 404
 

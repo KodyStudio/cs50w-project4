@@ -11,9 +11,11 @@
 
         let carrito = [];
         let total = 0;
+        let precio = 0;
         const DOMitems = document.querySelector('#items');
         const DOMcarrito = document.querySelector('#carrito');
         const DOMtotal = document.querySelector('#total');
+        const DOMprecio = document.querySelector('#precio');
         const DOMbotonVaciar = document.querySelector('#boton-vaciar');
 
         // Funciones
@@ -129,6 +131,9 @@
         function calcularTotal() {
             // Limpiamos precio anterior
             total = 0;
+
+            precio = 0;
+
             // Recorremos el array del carrito
             carrito.forEach((item) => {
                 // De cada elemento obtenemos su precio
@@ -136,9 +141,15 @@
                     return itemBaseDatos.id === parseInt(item);
                 });
                 total = total + miItem[0].precio;
+
+                precio = (35 / total)* 100 + total
             });
             // Renderizamos el precio en el HTML
             DOMtotal.textContent = total.toFixed(2);
+            DOMprecio.textContent = precio.toFixed(2);
+            
+            
+            
         }
 
         /**
@@ -160,12 +171,14 @@
 
     });
     }
+
 </script>
 </head>
 
 <body>
     <div class="container-fluid">
-        <div class="row">
+        <div class="row"> 
+        
             <!-- Elementos generados a partir del JSON -->
             <div class="row">
                 <main id="items" class="col-sm-8 row"></main>
@@ -183,6 +196,9 @@
                 <button id="boton-vaciar" class="btn btn-danger">Vaciar</button>
             </aside>
         </div>
+        
     </div>
+
+ 
 
     {% endblock%}
